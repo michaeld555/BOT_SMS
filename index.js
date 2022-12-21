@@ -7,11 +7,10 @@ bot.on('message', (msg) => {
     const messageId = msg.message_id;
     const name = msg.from.first_name;
 
-  
     // Envie a mensagem com os botões de seleção
       
     bot.sendPhoto(chatId, media, {
-        caption: `✨ Olá, ${name} Seja bem-vindo (a)!\n\n 😉 Eu Sou Um Bot Feito Para Receber SMS's De Varios Serviços.\n\n 💰 | \*Seu Saldo:* R$: 3.35\n\n ↘️ Opções Abaixo:`,
+        caption: `• Bem-vindo ${name}\n\n • ID de cliente: ${chatId}\n • Para recarregar envie /recarga\n • Ou clique no botão recarregar\n\n • Canal: @teste_virtual\n • Nosso suporte: @teste_suporte\n`,
         reply_markup: startKeyboard
         }).then((sentMessage) => {
         // Armazene o ID da mensagem enviada para usar mais tarde com o método editMessageText
