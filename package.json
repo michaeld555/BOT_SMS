@@ -1,0 +1,17 @@
+{
+  "name": "mercadopago-pix",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "node src/index.js"
+  },
+  "author": "Michael",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "mercadopago": "^1.5.14",
+    "node-telegram-bot-api": "^0.60.0"
+  },
+  "type": "module"
+}
