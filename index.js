@@ -1,5 +1,7 @@
 import { bot, media } from './src/utils/config.js';
 import { startKeyboard } from './src/utils/buttons.js';
+var express = require("express");
+var app = express();
 
 
 bot.on('message', (msg) => {
@@ -38,3 +40,5 @@ bot.on('message', (msg) => {
     }
   });
 
+  var porta = 8080;
+  app.listen(porta);
