@@ -1,6 +1,6 @@
 import { bot, media } from './src/utils/config.js';
 import { startKeyboard } from './src/utils/buttons.js';
-var express = require("express");
+import express from 'express';
 var app = express();
 
 
