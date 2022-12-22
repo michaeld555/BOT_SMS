@@ -1,10 +1,12 @@
 import { startKeyboard, configKeyboard, rechargeKeyboard } from '../utils/buttons.js';
 import { faqText, instrText }from '../utils/text.js';
+import { startBot } from './query.js';
 
 
 const startMessage = (bot, msg) => {
 
     const media = 'https://michaelneves.tech/teste.png';
+    startBot(msg);
 
     bot.sendPhoto( msg.chat.id, media, {
         caption: `• Bem-vindo ${ msg.from.first_name }\n\n • ID de cliente: <code>${ msg.chat.id }</code>\n • Para recarregar <b>envie</b> /recarga\n • Ou clique no botão recarregar\n\n • Canal: @teste_virtual\n • Nosso suporte: @teste_suporte\n`,
