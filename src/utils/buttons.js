@@ -79,4 +79,17 @@ const rechargeKeyboard = {
 
 };
 
-export { startKeyboard, configKeyboard, rechargeKeyboard };
+const cancelPaymentKeyboard = {
+
+  inline_keyboard: [
+      [
+        {
+          text: '❌ Cancelar',
+          callback_data: 'cancelPayment'
+        }
+      ]
+    ]
+
+};
+
+export { startKeyboard, configKeyboard, rechargeKeyboard, cancelPaymentKeyboard };

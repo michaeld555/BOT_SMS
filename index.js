@@ -1,9 +1,10 @@
 import { bot } from './src/utils/config.js';
 import { startMessage, faqMessage, idMessage, instrMessage, configMessage, rechargeMessage, balanceMessage } from './src/functions/message.js';
-import { faqCallback, rechargeCallback } from './src/functions/callback.js';
+import { faqCallback, rechargeCallback, paymentCallback } from './src/functions/callback.js';
+import { rechargeValue, createPayment } from './src/functions/query.js';
+import { paymentMP } from './src/services/mercadopago.js';
 import express from 'express';
 var app = express();
-var saldo = 0.00;
 
 // Mensagens Diretas
 bot.on('message', (msg) => {
@@ -42,15 +43,49 @@ bot.on('callback_query', (callbackQuery) => {
 
     } else if (action === 'less5' || action === 'less10') {
 
+      rechargeValue(callbackQuery).then(value => {
+
       let less = (action === 'less5') ? 5 : 10;
-      let total = less;
-      rechargeCallback(bot, callbackQuery, total);
+      let total = value - less;
+      rechargeCallback(bot, callbackQuery, total);    /// Modularizar depois
+
+      }).catch(error => {
+        console.log(error);
+      });
 
     } else if (action === 'more5' || action === 'more10') {
       
-      let less = (action === 'more5') ? 50 : 100;
-      let total = less;
-      rechargeCallback(bot, callbackQuery, total);
+      rechargeValue(callbackQuery).then(value => {
+
+        let less = (action === 'more5') ? 5 : 10;
+        let total = value + less;
+        rechargeCallback(bot, callbackQuery, total); /// Modularizar depois
+  
+        }).catch(error => {
+          console.log(error);
+        });
+
+    } else if (action === 'payPix') {
+      
+      rechargeValue(callbackQuery).then(value => {
+
+        if(value >= 10){
+
+          paymentMP(value).then(data => {
+
+          createPayment(callbackQuery, data.response.id, value);
+          paymentCallback(bot, callbackQuery, data.response.point_of_interaction.transaction_data.qr_code); /// Modularizar depois
+    
+          }).catch(error => {
+            console.log(error);
+          });
+        } else {
+          bot.answerCallbackQuery(callbackQuery.id, '⚠ Atenção | A recarga mínima é R$ 10,00');
+        }
+  
+        }).catch(error => {
+          console.log(error);
+        });
 
     }
 });

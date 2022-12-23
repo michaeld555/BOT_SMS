@@ -110,4 +110,10 @@ const instrText = `- Siga as instruções abaixo para saber com exatidão o que 
 
  Faça um bom uso de nossa plataforma, se tiver alguma dica ou sugestão para a mesma use nosso @suporte_teste Obrigado!`;
 
-export { faqText, instrText };
+ const paymentText = (code) => {
+
+    return `<b>-> Pedido de RECARGA criado!</b>\n\n -> Código COPIA e COLA Gerado!\n\n<code>${code}</code>\n\n⚠️ O código acima gerado não é chave aleatória. É chave qr code.\n\n<b>Se estiver com duvida de como pagar clique aqui e saiba como pagar.</b>\n\n-> Esse código pix expira em 20 minutos\n-> Para copiar CLIQUE no código.\n-> Sua recarga será creditada em 1 minuto.`;
+
+ }
+
+export { faqText, instrText, paymentText };

@@ -4,28 +4,18 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-
-async function teste(){
-    mercadopago.configurations.setAccessToken(process.env.ACCESS_TOKEN);
-
-    var response = await mercadopago.payment_methods.listAll();
-    var payment_methods = response.body;
-
-    console.log(payment_methods)
-}
-
-async function teste2(){
+const paymentMP = async (valor) => {
 
 mercadopago.configurations.setAccessToken(process.env.ACCESS_TOKEN);
 
 var payment_data = {
-    transaction_amount: 10,
-    description: 'Título do produto',
+    transaction_amount: valor,
+    description: 'Saldo SMS - BOT',
     payment_method_id: 'pix',
     payer: {
-      email: 'test@test.com',
-      first_name: 'Test',
-      last_name: 'User',
+      email: 'saldo@bot.com',
+      first_name: 'Usuario',
+      last_name: 'Bot',
       identification: {
           type: 'CPF',
           number: '19119119100'
@@ -41,23 +31,29 @@ var payment_data = {
     }
   };
   
+  return new Promise((resolve, reject) => {
+
   mercadopago.payment.create(payment_data).then(function (data) {
-    console.log(data.response.point_of_interaction.transaction_data)
-    generateQR(data.response.point_of_interaction.transaction_data.qr_code_base64);
+    resolve(data);
   }).catch(function (error) {
-    
+    reject(error);
+  });
+
   });
 
 }
 
 function generateQR(image){
 
-    // convertendo a string base64 em um buffer
     const imageBuffer = Buffer.from(image, 'base64');
-
-    // escrevendo o buffer em um arquivo de imagem
     fs.writeFileSync('image.jpg', imageBuffer);
+    /* generateQR(data.response.point_of_interaction.transaction_data.qr_code_base64); */
 
 }
 
-teste()
+const savePayment = () => {
+
+  
+}
+
+export { paymentMP };

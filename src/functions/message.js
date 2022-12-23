@@ -1,6 +1,6 @@
 import { startKeyboard, configKeyboard, rechargeKeyboard } from '../utils/buttons.js';
 import { faqText, instrText }from '../utils/text.js';
-import { startBot } from './query.js';
+import { startBot, createRecharge, myBalance } from './query.js';
 
 
 const startMessage = (bot, msg) => {
@@ -48,14 +48,22 @@ const configMessage = (bot, msg) => {
 const rechargeMessage = (bot, chatId) => {
 
     const options = { parse_mode: 'html', reply_markup: rechargeKeyboard };
-    bot.sendMessage(chatId, `🔰 Escolha o valor para recarregar, depois selecione a <b>opção de pagamento.</b>\n\n 💰 Valor: <b>R$ 10,00</b>`, options);
+    bot.sendMessage(chatId, `🔰 Escolha o valor para recarregar, depois selecione a <b>opção de pagamento.</b>\n\n 💰 Valor: <b>R$ 10,00</b>`, options).then((Message) => {
+        createRecharge(Message);
+    });
 
 }
 
 const balanceMessage = (bot, msg) => {
 
-    const options = { parse_mode: 'html'};
-    bot.sendMessage(msg.chat.id, `💰 Seu saldo atual: <b>R$ 10,00</b>`, options);
+    myBalance(msg).then(saldo => {
+        
+        const options = { parse_mode: 'html'};
+        bot.sendMessage(msg.chat.id, `💰 Seu saldo atual: <b>R$ ${saldo}</b>`, options);
+
+      }).catch(error => {
+        console.log(error);
+      });
 
 }
 

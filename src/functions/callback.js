@@ -1,5 +1,6 @@
-import { faqText }from '../utils/text.js';
-import { rechargeKeyboard } from '../utils/buttons.js';
+import { faqText, paymentText }from '../utils/text.js';
+import { rechargeKeyboard, cancelPaymentKeyboard } from '../utils/buttons.js';
+import { updateRecharge } from './query.js'
 
 const faqCallback = (bot, callbackQuery) => {
 
@@ -11,6 +12,8 @@ const faqCallback = (bot, callbackQuery) => {
 const rechargeCallback = (bot, callbackQuery, valor) => {
 
         if(valor >= 10){
+
+            updateRecharge(callbackQuery, valor);
 
             bot.editMessageText(`🔰 Escolha o valor para recarregar, depois selecione a <b>opção de pagamento.</b>\n\n 💰 Valor: <b>R$ ${valor}</b>`, {
             chat_id: callbackQuery.message.chat.id,
@@ -28,4 +31,18 @@ const rechargeCallback = (bot, callbackQuery, valor) => {
 
 }
 
-export { faqCallback, rechargeCallback };
+const paymentCallback = (bot, callbackQuery, code) => {
+
+    const text = paymentText(code);
+
+    bot.editMessageText(text, {
+    chat_id: callbackQuery.message.chat.id,
+    message_id: callbackQuery.message.message_id,
+    reply_markup: cancelPaymentKeyboard,
+    parse_mode: 'html'
+    });
+        
+
+}
+
+export { faqCallback, rechargeCallback, paymentCallback };
