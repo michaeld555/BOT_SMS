@@ -51,9 +51,4 @@ function generateQR(image){
 
 }
 
-const savePayment = () => {
-
-  
-}
-
 export { paymentMP };
