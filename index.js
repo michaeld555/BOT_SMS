@@ -1,6 +1,6 @@
 import { bot } from './src/utils/config.js';
-import { startMessage, faqMessage, idMessage, instrMessage, configMessage, rechargeMessage, balanceMessage } from './src/functions/message.js';
-import { faqCallback, rechargeCallback, paymentCallback, cancelPaymentCallback } from './src/functions/callback.js';
+import { startMessage, faqMessage, idMessage, instrMessage, configMessage, rechargeMessage, balanceMessage, myOperatorMessage } from './src/functions/message.js';
+import { faqCallback, rechargeCallback, paymentCallback, cancelPaymentCallback, updateOperatorCallback } from './src/functions/callback.js';
 import { rechargeValue, createPayment } from './src/functions/query.js';
 import { paymentMP } from './src/services/mercadopago.js';
 import { webhook } from './routes/route.js';
@@ -30,9 +30,8 @@ bot.on('message', (msg) => {
 
 // Mensagens CallBack
 bot.on('callback_query', (callbackQuery) => {
+
     const action = callbackQuery.data;
-    const chatId = callbackQuery.message.chat.id;
-    const messageId = callbackQuery.message.message_id;
     
     if (action === 'faq') {
 
@@ -92,9 +91,18 @@ bot.on('callback_query', (callbackQuery) => {
 
       cancelPaymentCallback(bot, callbackQuery);
 
+    } else if(action === 'operadora'){
+
+      myOperatorMessage(bot, callbackQuery);
+
+    } else if(action === 'aleatoria' || action === 'vivo' || action === 'oi' || action === 'claro' || action === 'tim'){
+
+      updateOperatorCallback(bot, action, callbackQuery);
+
     }
+
 });
 
-webhook(app, express);
+webhook(app, express, bot);
 var porta = process.env.PORT || 8080;
 app.listen(porta);

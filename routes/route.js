@@ -1,8 +1,7 @@
 import bodyParser from 'body-parser';
-import { bot } from '../src/utils/config.js';
 import { updatePayment } from '../src/services/mercadopago.js';
 
-const webhook = (app, express) => {
+const webhook = (app, express, bot) => {
 
         // configurando o body-parser
         app.use(bodyParser.urlencoded({ extended: true }));

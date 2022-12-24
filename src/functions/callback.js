@@ -1,6 +1,7 @@
 import { faqText, paymentText }from '../utils/text.js';
 import { rechargeKeyboard, cancelPaymentKeyboard } from '../utils/buttons.js';
-import { updateRecharge, cancelPaymentQuery } from './query.js'
+import { updateRecharge, cancelPaymentQuery, updateMyOperator } from './query.js';
+import { subWord }from '../utils/config.js';
 
 const faqCallback = (bot, callbackQuery) => {
 
@@ -59,7 +60,7 @@ const cancelPaymentCallback = (bot, callbackQuery) => {
 
 const updatePaymentCallback = (bot, payment) => {
     console.log(payment);
-    bot.editMessageText(`<b>Saldo de R$${payment.value} adicionado!</b>`, {
+    bot.editMessageText(`<b>O valor de R$${payment.value} foi adicionado ao seu saldo!</b>`, {
         chat_id: payment.chat_id,
         message_id: payment.message_id,
         parse_mode: 'html'
@@ -67,4 +68,22 @@ const updatePaymentCallback = (bot, payment) => {
 
 }
 
-export { faqCallback, rechargeCallback, paymentCallback, cancelPaymentCallback, updatePaymentCallback };
+const updateOperatorCallback = (bot, data, callbackQuery) => {
+
+    const operator = (data === 'aleatoria') ? null : data;
+
+    updateMyOperator(callbackQuery, operator).then(result => {
+
+        bot.editMessageText(`<b>Operadora atual:</b> ${subWord(data)}\n\n Se não houver números para o serviço na operadora <code>${data.toUpperCase()}</code> selecione outra /config ou deixe aleatória.`, {
+            chat_id: callbackQuery.message.chat.id,
+            message_id: callbackQuery.message.message_id,
+            parse_mode: 'html'
+            });
+
+      }).catch(error => {
+        console.log(error);
+      });
+
+}
+
+export { faqCallback, rechargeCallback, paymentCallback, cancelPaymentCallback, updatePaymentCallback, updateOperatorCallback };

@@ -184,19 +184,20 @@ const searchPaymentQuery = (bot, idPayment) => {
 
 }
 
-const updateMyBalance = (bot, results) => {
+const updateMyBalance = (bot, resultado) => {
 
-  myTotalBalance(results.chat_id).then(saldo => {
+  myTotalBalance(resultado.chat_id).then(saldo => {
      
-    const totalBalance = saldo + results.value;
+    const totalBalance = saldo + resultado.value;
     const connection = connect();
-    const updateQuery = `UPDATE users SET balance = ${totalBalance}, updated_at = NOW() WHERE chat_id = ${results.chat_id}`;
+    const updateQuery = `UPDATE users SET balance = ${totalBalance}, updated_at = NOW() WHERE chat_id = ${resultado.chat_id}`;
 
     connection.execute(updateQuery, (error, results) => {
         if (error) {
         console.log(error);
         } else {
-          updatePaymentCallback(bot, results);
+          console.log(resultado);
+          updatePaymentCallback(bot, resultado);
         }
     });
 
@@ -208,4 +209,47 @@ const updateMyBalance = (bot, results) => {
 
 }
 
-export { startBot, createRecharge, myBalance, rechargeValue, updateRecharge, createPayment, cancelPaymentQuery, searchPaymentQuery};
+const myOperator = (id) => {
+
+  const connection = connect();
+  const selectQuery = `SELECT * FROM users WHERE chat_id = ${id} LIMIT 1`;
+
+  return new Promise((resolve, reject) => {
+      connection.query(selectQuery, (error, results) => {
+        if (error) {
+          console.log(error);
+          reject(error);
+        } else {
+
+          const operator = (results[0].operator === null) ? 'Áleatoria' : results[0].operator;
+          resolve(operator);
+
+        }
+      });
+  
+      connection.end();
+    });
+
+}
+
+const updateMyOperator = (callbackQuery, data) => {
+     
+    const connection = connect();
+    const updateQuery = `UPDATE users SET operator = '${data}', updated_at = NOW() WHERE chat_id = ${callbackQuery.message.chat.id}`;
+
+    return new Promise((resolve, reject) => {
+    connection.execute(updateQuery, (error, results) => {
+        if (error) {
+        reject(error);
+        } else {
+          console.log(results);
+          resolve(results);
+        }
+    });
+
+    connection.end();
+  });
+
+}
+
+export { startBot, createRecharge, myBalance, rechargeValue, updateRecharge, createPayment, cancelPaymentQuery, searchPaymentQuery, myOperator, updateMyOperator};

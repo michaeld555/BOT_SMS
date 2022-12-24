@@ -1,6 +1,7 @@
-import { startKeyboard, configKeyboard, rechargeKeyboard } from '../utils/buttons.js';
+import { startKeyboard, configKeyboard, rechargeKeyboard, operatorsNumber } from '../utils/buttons.js';
 import { faqText, instrText }from '../utils/text.js';
-import { startBot, createRecharge, myBalance } from './query.js';
+import { subWord }from '../utils/config.js';
+import { startBot, createRecharge, myBalance, myOperator } from './query.js';
 
 
 const startMessage = (bot, msg) => {
@@ -67,6 +68,23 @@ const balanceMessage = (bot, msg) => {
 
 }
 
+const myOperatorMessage = (bot, callbackQuery) => {
+
+    myOperator(callbackQuery.message.chat.id).then(operator => {
+
+        bot.editMessageText(`Operadora atual: <b>${subWord(operator)}</b>`, {
+            chat_id: callbackQuery.message.chat.id,
+            message_id: callbackQuery.message.message_id,
+            reply_markup: operatorsNumber,
+            parse_mode: 'html'
+            });
+
+      }).catch(error => {
+        console.log(error);
+      });
+
+}
 
 
-export { startMessage, faqMessage, idMessage, instrMessage, configMessage, rechargeMessage, balanceMessage };
+
+export { startMessage, faqMessage, idMessage, instrMessage, configMessage, rechargeMessage, balanceMessage, myOperatorMessage };

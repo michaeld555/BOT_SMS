@@ -32,8 +32,8 @@ const configKeyboard = {
         ],
         [
           {
-            text: '💸 Transferir saldo',
-            callback_data: 'transferir'
+            text: '💸 Afiliados',
+            callback_data: 'afiliados'
           }
         ]
       ]
@@ -43,12 +43,6 @@ const configKeyboard = {
 const rechargeKeyboard = {
 
   inline_keyboard: [
-      [
-        {
-          text: 'Digitar o valor da recarga',
-          callback_data: 'enterValue'
-        }
-      ],
       [
         {
           text: '+ R$0.10',
@@ -112,4 +106,41 @@ const cancelPaymentKeyboard = {
 
 };
 
-export { startKeyboard, configKeyboard, rechargeKeyboard, cancelPaymentKeyboard };
+const operatorsNumber = {
+
+  inline_keyboard: [
+      [
+        {
+          text: 'Áleatoria',
+          callback_data: 'aleatoria'
+        }
+      ],
+      [
+        {
+          text: 'Claro',
+          callback_data: 'claro'
+        }
+      ],
+      [
+        {
+          text: 'Vivo',
+          callback_data: 'vivo'
+        }
+      ],
+      [
+        {
+          text: 'Tim',
+          callback_data: 'tim'
+        }
+      ],
+      [
+        {
+          text: 'Oi',
+          callback_data: 'oi'
+        }
+      ],
+    ]
+
+};
+
+export { startKeyboard, configKeyboard, rechargeKeyboard, cancelPaymentKeyboard, operatorsNumber };

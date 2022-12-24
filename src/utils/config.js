@@ -17,4 +17,8 @@ const connect = () => {
 
 const bot = new TelegramBot(process.env.BOT_TOKEN, {polling: true});
 
-export { bot, connect };
+const subWord = (word) => {
+  return word.charAt(0).toUpperCase() + word.substring(1);
+}
+
+export { bot, connect, subWord };

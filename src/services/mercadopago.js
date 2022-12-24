@@ -57,6 +57,7 @@ const cancelPayment = (paymentId) => {
 const updatePayment = (bot, paymentId) => {
 
   mercadopago.payment.get(paymentId).then(payment => {
+    console.log(payment.body.status);
     if(payment.body.status == 'approved'){
       searchPaymentQuery(bot, paymentId);
     }
