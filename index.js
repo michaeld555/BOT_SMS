@@ -95,6 +95,7 @@ bot.on('callback_query', (callbackQuery) => {
     }
 });
 
-webhook();
+
 var porta = process.env.PORT || 8080;
+webhook(porta);
 app.listen(porta);
