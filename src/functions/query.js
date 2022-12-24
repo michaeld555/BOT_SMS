@@ -1,4 +1,5 @@
 import { connect } from "../utils/config.js";
+import { cancelPayment } from '../services/mercadopago.js';
 
 const startBot = (msg) => {
 
@@ -17,6 +18,7 @@ const startBot = (msg) => {
 
         } else {
         // Se não houver, faz o INSERT
+        const connection = connect();
         const insertQuery = `INSERT INTO users (chat_id, full_name, created_at, updated_at) VALUES (${msg.chat.id}, '${msg.from.first_name}', NOW(), NOW())`;
         connection.execute(insertQuery, (error, results) => {
             if (error) {
@@ -25,6 +27,9 @@ const startBot = (msg) => {
             console.log(results);
             }
         });
+        
+        connection.end();
+
         }
     }
     });
@@ -36,7 +41,7 @@ const startBot = (msg) => {
 const createRecharge = (msg) => {
 
     const connection = connect();
-    const insertQuery = `INSERT INTO recharge_value (chat_id, message_id, value, created_at, updated_at) VALUES (${msg.chat.id}, '${msg.message_id}', 10.00, NOW(), NOW())`;
+    const insertQuery = `INSERT INTO recharge_value (chat_id, message_id, value, created_at, updated_at) VALUES (${msg.chat.id}, '${msg.message_id}', 5.00, NOW(), NOW())`;
 
     connection.execute(insertQuery, (error, results) => {
         if (error) {
@@ -86,6 +91,7 @@ const rechargeValue = (callbackQuery) => {
       });
 
 }
+
 const myBalance = (msg) => {
 
     const connection = connect();
@@ -123,4 +129,21 @@ const createPayment = (callbackQuery, payment, value) => {
 
 }
 
-export { startBot, createRecharge, myBalance, rechargeValue, updateRecharge, createPayment };
+const cancelPaymentQuery = (callbackQuery) => {
+
+  const connection = connect();
+  const selectQuery = `SELECT * FROM payments WHERE chat_id = ${callbackQuery.message.chat.id} AND message_id = ${callbackQuery.message.message_id} LIMIT 1`;
+
+  connection.query(selectQuery, (error, results) => {
+  if (error) {
+      console.log(error);
+  } else {
+    cancelPayment(results[0].id_payment)
+  }
+  });
+
+  connection.end();
+
+}
+
+export { startBot, createRecharge, myBalance, rechargeValue, updateRecharge, createPayment, cancelPaymentQuery };

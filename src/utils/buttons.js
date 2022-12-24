@@ -51,22 +51,42 @@ const rechargeKeyboard = {
       ],
       [
         {
-          text: '-5',
-          callback_data: 'less5'
+          text: '+ R$0.10',
+          callback_data: 'more01'
         },
         {
-          text: '+5',
-          callback_data: 'more5'
+          text: '- R$0.10',
+          callback_data: 'less01'
         }
       ],
       [
         {
-          text: '-10',
-          callback_data: 'less10'
+          text: '+ R$1',
+          callback_data: 'more1'
         },
         {
-          text: '+10',
+          text: '- R$1',
+          callback_data: 'less1'
+        }
+      ],
+      [
+        {
+          text: '+ R$5',
+          callback_data: 'more5'
+        },
+        {
+          text: '- R$5',
+          callback_data: 'less5'
+        }
+      ],
+      [
+        {
+          text: '+ R$10',
           callback_data: 'more10'
+        },
+        {
+          text: '- R$10',
+          callback_data: 'less10'
         }
       ],
       [

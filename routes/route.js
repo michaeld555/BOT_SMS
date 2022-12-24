@@ -3,22 +3,26 @@ var app = express();
 import bodyParser from 'body-parser';
 
 
-app.listen(3000, () => {
+const webhook = () => {
+
+    app.listen(8000, () => {
     
-    app.get('/webhooks', (req, res) => {
+        app.post('/webhooks', (req, res) => {
+    
+            // configurando o body-parser
+            app.use(bodyParser.urlencoded({ extended: true }));
+            app.use(bodyParser.json());
 
-        res.send('Ja Node Teste');
-        
+            console.log(req);
+
+            res.status(200).json({
+                success: true
+            });
+    
+        });
+    
     });
 
-    app.post('/webhooks', (req, res) => {
+}
 
-        // configurando o body-parser
-        app.use(bodyParser.urlencoded({ extended: true }));
-        app.use(bodyParser.json());
-        console.log(req);
-        res.send('Teste POST');
-
-    });
-
-});
+export { webhook };

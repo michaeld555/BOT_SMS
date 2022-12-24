@@ -1,6 +1,6 @@
 import { faqText, paymentText }from '../utils/text.js';
 import { rechargeKeyboard, cancelPaymentKeyboard } from '../utils/buttons.js';
-import { updateRecharge } from './query.js'
+import { updateRecharge, cancelPaymentQuery } from './query.js'
 
 const faqCallback = (bot, callbackQuery) => {
 
@@ -11,7 +11,7 @@ const faqCallback = (bot, callbackQuery) => {
 
 const rechargeCallback = (bot, callbackQuery, valor) => {
 
-        if(valor >= 10){
+        if(valor >= 5){
 
             updateRecharge(callbackQuery, valor);
 
@@ -24,7 +24,7 @@ const rechargeCallback = (bot, callbackQuery, valor) => {
 
         } else {
 
-            bot.answerCallbackQuery(callbackQuery.id, '⚠ Atenção | A recarga mínima é R$ 10,00');
+            bot.answerCallbackQuery(callbackQuery.id, '⚠ Atenção | A recarga mínima é R$ 5,00');
             
         }
         
@@ -45,4 +45,16 @@ const paymentCallback = (bot, callbackQuery, code) => {
 
 }
 
-export { faqCallback, rechargeCallback, paymentCallback };
+const cancelPaymentCallback = (bot, callbackQuery) => {
+
+    cancelPaymentQuery(callbackQuery);
+
+    bot.deleteMessage(callbackQuery.message.chat.id, callbackQuery.message.message_id).then(() => {
+        console.log('Mensagem deletada com sucesso');
+      }).catch(error => {
+        console.error(`Erro ao deletar a mensagem: ${error}`);
+      });
+
+}
+
+export { faqCallback, rechargeCallback, paymentCallback, cancelPaymentCallback };

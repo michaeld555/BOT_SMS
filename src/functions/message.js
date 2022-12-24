@@ -48,7 +48,7 @@ const configMessage = (bot, msg) => {
 const rechargeMessage = (bot, chatId) => {
 
     const options = { parse_mode: 'html', reply_markup: rechargeKeyboard };
-    bot.sendMessage(chatId, `🔰 Escolha o valor para recarregar, depois selecione a <b>opção de pagamento.</b>\n\n 💰 Valor: <b>R$ 10,00</b>`, options).then((Message) => {
+    bot.sendMessage(chatId, `🔰 Escolha o valor para recarregar, depois selecione a <b>opção de pagamento.</b>\n\n 💰 Valor: <b>R$ 5,00</b>`, options).then((Message) => {
         createRecharge(Message);
     });
 

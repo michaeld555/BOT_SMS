@@ -43,6 +43,16 @@ var payment_data = {
 
 }
 
+const cancelPayment = (paymentId) => {
+
+  mercadopago.payment.cancel(paymentId).then(payment => {
+    console.log(`Pagamento cancelado com sucesso: ${payment}`);
+  }).catch(error => {
+    console.error(`Erro ao cancelar o pagamento: ${error}`);
+  });
+
+}
+
 function generateQR(image){
 
     const imageBuffer = Buffer.from(image, 'base64');
@@ -51,4 +61,4 @@ function generateQR(image){
 
 }
 
-export { paymentMP };
+export { paymentMP, cancelPayment };
