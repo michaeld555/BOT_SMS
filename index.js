@@ -6,7 +6,7 @@ import { paymentMP } from './src/services/mercadopago.js';
 import { webhook } from './routes/route.js';
 import express from 'express';
 var app = express();
-webhook(app);
+
 // Mensagens Diretas
 bot.on('message', (msg) => {
 
@@ -95,6 +95,6 @@ bot.on('callback_query', (callbackQuery) => {
     }
 });
 
-
+webhook(app, express);
 var porta = process.env.PORT || 8080;
 app.listen(porta);

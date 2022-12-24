@@ -1,12 +1,13 @@
 import mercadopago from 'mercadopago';
 import fs from 'fs';
 import dotenv from 'dotenv';
+import { searchPaymentQuery } from '../functions/query.js';
 
 dotenv.config();
 
-const paymentMP = async (valor) => {
-
 mercadopago.configurations.setAccessToken(process.env.ACCESS_TOKEN);
+
+const paymentMP = async (valor) => {
 
 var payment_data = {
     transaction_amount: valor,
@@ -53,6 +54,18 @@ const cancelPayment = (paymentId) => {
 
 }
 
+const updatePayment = (bot, paymentId) => {
+
+  mercadopago.payment.get(paymentId).then(payment => {
+    if(payment.body.status == 'approved'){
+      searchPaymentQuery(bot, paymentId);
+    }
+  }).catch(error => {
+    console.error(`Erro ao buscar pagamento: ${error}`);
+  });
+
+}
+
 function generateQR(image){
 
     const imageBuffer = Buffer.from(image, 'base64');
@@ -61,4 +74,4 @@ function generateQR(image){
 
 }
 
-export { paymentMP, cancelPayment };
+export { paymentMP, cancelPayment, updatePayment};

@@ -1,5 +1,6 @@
 import { connect } from "../utils/config.js";
 import { cancelPayment } from '../services/mercadopago.js';
+import { updatePaymentCallback } from '../functions/callback.js';
 
 const startBot = (msg) => {
 
@@ -112,6 +113,26 @@ const myBalance = (msg) => {
 
 }
 
+const myTotalBalance = (id) => {
+
+    const connection = connect();
+    const selectQuery = `SELECT * FROM users WHERE chat_id = ${id} LIMIT 1`;
+
+    return new Promise((resolve, reject) => {
+        connection.query(selectQuery, (error, results) => {
+          if (error) {
+            console.log(error);
+            reject(error);
+          } else {
+            resolve(results[0].balance);
+          }
+        });
+    
+        connection.end();
+      });
+
+}
+
 const createPayment = (callbackQuery, payment, value) => {
 
     const connection = connect();
@@ -146,4 +167,45 @@ const cancelPaymentQuery = (callbackQuery) => {
 
 }
 
-export { startBot, createRecharge, myBalance, rechargeValue, updateRecharge, createPayment, cancelPaymentQuery };
+const searchPaymentQuery = (bot, idPayment) => {
+
+  const connection = connect();
+  const selectQuery = `SELECT * FROM payments WHERE id_payment = ${idPayment} LIMIT 1`;
+
+  connection.query(selectQuery, (error, results) => {
+  if (error) {
+      console.log(error);
+  } else {
+    updateMyBalance(bot, results[0]);
+  }
+  });
+
+  connection.end();
+
+}
+
+const updateMyBalance = (bot, results) => {
+
+  myTotalBalance(results.chat_id).then(saldo => {
+     
+    const totalBalance = saldo + results.value;
+    const connection = connect();
+    const updateQuery = `UPDATE users SET balance = ${totalBalance}, updated_at = NOW() WHERE chat_id = ${results.chat_id}`;
+
+    connection.execute(updateQuery, (error, results) => {
+        if (error) {
+        console.log(error);
+        } else {
+          updatePaymentCallback(bot, results);
+        }
+    });
+
+    connection.end();
+
+  }).catch(error => {
+    console.log(error);
+  });
+
+}
+
+export { startBot, createRecharge, myBalance, rechargeValue, updateRecharge, createPayment, cancelPaymentQuery, searchPaymentQuery};

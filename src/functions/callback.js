@@ -57,4 +57,14 @@ const cancelPaymentCallback = (bot, callbackQuery) => {
 
 }
 
-export { faqCallback, rechargeCallback, paymentCallback, cancelPaymentCallback };
+const updatePaymentCallback = (bot, payment) => {
+
+    bot.editMessageText(`<b>Saldo de R$${payment.value} adicionado!</b>`, {
+        chat_id: payment.chat_id,
+        message_id: payment.message_id,
+        parse_mode: 'html'
+        });
+
+}
+
+export { faqCallback, rechargeCallback, paymentCallback, cancelPaymentCallback, updatePaymentCallback };
