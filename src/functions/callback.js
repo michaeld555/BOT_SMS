@@ -58,7 +58,7 @@ const cancelPaymentCallback = (bot, callbackQuery) => {
 }
 
 const updatePaymentCallback = (bot, payment) => {
-
+    console.log(payment);
     bot.editMessageText(`<b>Saldo de R$${payment.value} adicionado!</b>`, {
         chat_id: payment.chat_id,
         message_id: payment.message_id,
