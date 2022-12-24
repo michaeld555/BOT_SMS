@@ -4,10 +4,9 @@ import { faqCallback, rechargeCallback, paymentCallback, cancelPaymentCallback }
 import { rechargeValue, createPayment } from './src/functions/query.js';
 import { paymentMP } from './src/services/mercadopago.js';
 import { webhook } from './routes/route.js';
-webhook();
 import express from 'express';
 var app = express();
-
+webhook(app);
 // Mensagens Diretas
 bot.on('message', (msg) => {
 

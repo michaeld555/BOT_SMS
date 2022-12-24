@@ -1,10 +1,6 @@
-import express from 'express';
-var app = express();
 import bodyParser from 'body-parser';
 
-const webhook = () => {
-
-    app.listen(3000, () => {
+const webhook = (app) => {
 
         app.get('/webhooks', (req, res) => {
             res.send('Ja Node Teste');
@@ -21,8 +17,6 @@ const webhook = () => {
             });
     
         });
-    
-    });
 
 }
 
