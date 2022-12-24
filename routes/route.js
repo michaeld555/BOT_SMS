@@ -6,6 +6,12 @@ import bodyParser from 'body-parser';
 const webhook = () => {
 
     app.listen(8000, () => {
+
+        app.get('/webhooks', (req, res) => {
+
+            res.send('Ja Node Teste');
+            
+        });
     
         app.post('/webhooks', (req, res) => {
     
