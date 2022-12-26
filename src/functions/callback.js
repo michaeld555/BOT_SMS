@@ -1,7 +1,7 @@
-import { faqText, paymentText }from '../utils/text.js';
-import { rechargeKeyboard, cancelPaymentKeyboard } from '../utils/buttons.js';
-import { updateRecharge, cancelPaymentQuery, updateMyOperator } from './query.js';
-import { subWord }from '../utils/config.js';
+import { faqText, paymentText, serviceText } from '../utils/text.js';
+import { rechargeKeyboard, cancelPaymentKeyboard, getServiceKeyboard, servicesKeyboard } from '../utils/buttons.js';
+import { updateRecharge, cancelPaymentQuery, updateMyOperator, myUserQuery } from './query.js';
+import { subWord, formataNumero } from '../utils/config.js';
 
 const faqCallback = (bot, callbackQuery) => {
 
@@ -16,7 +16,7 @@ const rechargeCallback = (bot, callbackQuery, valor) => {
 
             updateRecharge(callbackQuery, valor);
 
-            bot.editMessageText(`🔰 Escolha o valor para recarregar, depois selecione a <b>opção de pagamento.</b>\n\n 💰 Valor: <b>R$ ${valor}</b>`, {
+            bot.editMessageText(`🔰 Escolha o valor para recarregar, depois selecione a <b>opção de pagamento.</b>\n\n 💰 Valor: <b>R$ ${formataNumero(valor)}</b>`, {
             chat_id: callbackQuery.message.chat.id,
             message_id: callbackQuery.message.message_id,
             reply_markup: rechargeKeyboard,
@@ -59,8 +59,8 @@ const cancelPaymentCallback = (bot, callbackQuery) => {
 }
 
 const updatePaymentCallback = (bot, payment) => {
-    console.log(payment);
-    bot.editMessageText(`<b>O valor de R$${payment.value} foi adicionado ao seu saldo!</b>`, {
+    
+    bot.editMessageText(`<b>O valor de R$ ${formataNumero(payment.value)} foi adicionado ao seu saldo!</b>`, {
         chat_id: payment.chat_id,
         message_id: payment.message_id,
         parse_mode: 'html'
@@ -86,4 +86,34 @@ const updateOperatorCallback = (bot, data, callbackQuery) => {
 
 }
 
-export { faqCallback, rechargeCallback, paymentCallback, cancelPaymentCallback, updatePaymentCallback, updateOperatorCallback };
+const getNumberCallback = (bot, callbackQuery, service) => {
+    
+    myUserQuery(callbackQuery.message.chat.id).then(user => {
+        
+        bot.editMessageText( serviceText(service, user), {
+            chat_id: callbackQuery.message.chat.id,
+            message_id: callbackQuery.message.message_id,
+            reply_markup: getServiceKeyboard(service),
+            parse_mode: 'html'
+            });
+
+    });
+
+}
+
+const backServiceMenu = (bot, callbackQuery) => {
+
+    servicesKeyboard().then(result => {
+
+    bot.editMessageText( `🔰 Escolha abaixo o serviço desejado.`, {
+        chat_id: callbackQuery.message.chat.id,
+        message_id: callbackQuery.message.message_id,
+        reply_markup: result,
+        parse_mode: 'html'
+        });
+
+    })
+
+}
+
+export { faqCallback, rechargeCallback, paymentCallback, cancelPaymentCallback, updatePaymentCallback, updateOperatorCallback, getNumberCallback, backServiceMenu };

@@ -1,7 +1,7 @@
 import { bot } from './src/utils/config.js';
-import { startMessage, faqMessage, idMessage, instrMessage, configMessage, rechargeMessage, balanceMessage, myOperatorMessage } from './src/functions/message.js';
-import { faqCallback, rechargeCallback, paymentCallback, cancelPaymentCallback, updateOperatorCallback } from './src/functions/callback.js';
-import { rechargeValue, createPayment } from './src/functions/query.js';
+import { startMessage, faqMessage, idMessage, instrMessage, configMessage, rechargeMessage, balanceMessage, myOperatorMessage, servicesMessage } from './src/functions/message.js';
+import { faqCallback, rechargeCallback, paymentCallback, cancelPaymentCallback, updateOperatorCallback, getNumberCallback, backServiceMenu } from './src/functions/callback.js';
+import { rechargeValue, createPayment, getAllServices } from './src/functions/query.js';
 import { paymentMP } from './src/services/mercadopago.js';
 import { webhook } from './routes/route.js';
 import express from 'express';
@@ -24,6 +24,8 @@ bot.on('message', (msg) => {
     rechargeMessage(bot, msg.chat.id);
   } else if(msg.text.startsWith('/saldo')) {
     balanceMessage(bot, msg);
+  } else if(msg.text.startsWith('/servicos')) {
+    servicesMessage(bot, msg.chat.id);
   }
     
 });
@@ -53,11 +55,11 @@ bot.on('callback_query', (callbackQuery) => {
         console.log(error);
       });
 
-    } else if (action === 'more01' || action === 'more1' || action === 'more5' || action === 'more10') {
+    } else if (action === 'more1' || action === 'more5' || action === 'more10') {
       
       rechargeValue(callbackQuery).then(value => {
 
-        let less = (action != 'more01' && action != 'more1') ? ((action === 'more5') ? 5 : 10) : ((action === 'more01') ? 0.10 : 1);
+        let less = (action != 'more1') ? ((action === 'more5') ? 5 : 10) : (1);
         let total = value + less;
         rechargeCallback(bot, callbackQuery, total); /// Modularizar depois
   
@@ -99,7 +101,25 @@ bot.on('callback_query', (callbackQuery) => {
 
       updateOperatorCallback(bot, action, callbackQuery);
 
+    } else if(action === 'servicos'){
+
+      servicesMessage(bot, callbackQuery.message.chat.id);
+
+    } else if(action === 'backServices'){
+
+      backServiceMenu(bot, callbackQuery);
+
     }
+
+    getAllServices().then(result => {
+
+      for (let i = 0; i < result.length; i++) {
+        if(action === `${result[i].service_callback}`){
+          getNumberCallback(bot, callbackQuery, result[i]);
+        }
+      }
+
+    });
 
 });
 

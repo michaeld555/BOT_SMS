@@ -1,6 +1,6 @@
-import { startKeyboard, configKeyboard, rechargeKeyboard, operatorsNumber } from '../utils/buttons.js';
+import { startKeyboard, configKeyboard, rechargeKeyboard, operatorsNumber, servicesKeyboard } from '../utils/buttons.js';
 import { faqText, instrText }from '../utils/text.js';
-import { subWord }from '../utils/config.js';
+import { subWord, formataNumero }from '../utils/config.js';
 import { startBot, createRecharge, myBalance, myOperator } from './query.js';
 
 
@@ -60,7 +60,7 @@ const balanceMessage = (bot, msg) => {
     myBalance(msg).then(saldo => {
         
         const options = { parse_mode: 'html'};
-        bot.sendMessage(msg.chat.id, `💰 Seu saldo atual: <b>R$ ${saldo}</b>`, options);
+        bot.sendMessage(msg.chat.id, `💰 Seu saldo atual: <b>R$ ${formataNumero(saldo)}</b>`, options);
 
       }).catch(error => {
         console.log(error);
@@ -85,6 +85,19 @@ const myOperatorMessage = (bot, callbackQuery) => {
 
 }
 
+const servicesMessage = (bot, chatId) => {
+
+    servicesKeyboard().then(result => {
+
+    const options = { parse_mode: 'html', reply_markup: result };
+    bot.sendMessage(chatId, `🔰 Escolha abaixo o serviço desejado.`, options);
+
+    }).catch(error => {
+        console.log(error);
+    })
+
+}
 
 
-export { startMessage, faqMessage, idMessage, instrMessage, configMessage, rechargeMessage, balanceMessage, myOperatorMessage };
+
+export { startMessage, faqMessage, idMessage, instrMessage, configMessage, rechargeMessage, balanceMessage, myOperatorMessage, servicesMessage };

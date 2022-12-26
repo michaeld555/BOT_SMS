@@ -1,3 +1,6 @@
+import { getAllServices } from '../functions/query.js';
+import { formataNumero } from '../utils/config.js';
+
 const startKeyboard = {
 
     inline_keyboard: [
@@ -43,16 +46,6 @@ const configKeyboard = {
 const rechargeKeyboard = {
 
   inline_keyboard: [
-      [
-        {
-          text: '+ R$0.10',
-          callback_data: 'more01'
-        },
-        {
-          text: '- R$0.10',
-          callback_data: 'less01'
-        }
-      ],
       [
         {
           text: '+ R$1',
@@ -143,4 +136,61 @@ const operatorsNumber = {
 
 };
 
-export { startKeyboard, configKeyboard, rechargeKeyboard, cancelPaymentKeyboard, operatorsNumber };
+const servicesKeyboard = () => {
+
+  return new Promise((resolve, reject) => {
+
+    getAllServices().then(result => {
+
+      let arrayButton = [];
+
+        for (let i = 0; i < result.length; i += 2) {
+          arrayButton.push([
+            {
+              text: `${result[i].service_name} | R$ ${formataNumero(result[i].service_price)}`,
+              callback_data: `${result[i].service_callback}`
+            },
+            {
+              text: `${result[i+1].service_name} | R$ ${formataNumero(result[i+1].service_price)}`,
+              callback_data: `${result[i+1].service_callback}`
+            }
+          ])
+        }
+    
+      resolve({
+        inline_keyboard: arrayButton
+      })
+
+    }).catch(error => {
+      reject(error);
+    })
+
+  });
+
+};
+
+const getServiceKeyboard = (service) => {
+
+  return {
+
+    inline_keyboard: [
+        [
+          {
+            text: 'Receber SMS',
+            callback_data: `${service.callback_service}`
+          }
+        ],
+        [
+          {
+            text: '⬅',
+            callback_data: 'backServices'
+          }
+        ]
+      ]
+  
+  }
+
+}
+
+
+export { startKeyboard, configKeyboard, rechargeKeyboard, cancelPaymentKeyboard, operatorsNumber, servicesKeyboard, getServiceKeyboard };

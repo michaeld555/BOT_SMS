@@ -21,4 +21,22 @@ const subWord = (word) => {
   return word.charAt(0).toUpperCase() + word.substring(1);
 }
 
-export { bot, connect, subWord };
+const formataNumero = (numero) => {
+  let numeroFormatado = numero.toFixed(2);
+  numeroFormatado = numeroFormatado.replace('.', ',');
+  return numeroFormatado;
+}
+
+const useState = initialValue => {
+
+  let value = initialValue;
+
+  const setState = newValue => {
+    value = newValue;
+  };
+
+  return [value, setState];
+};
+
+
+export { bot, connect, subWord, formataNumero, useState };

@@ -1,3 +1,6 @@
+import { formataNumero, subWord } from '../utils/config.js';
+import { getQuantityNumbers } from '../api/sms.js';
+
 const faqText = `<b>🔰 É possível escolher DDD específicos?</b>
 
 Infelizmente não é possível escolher DDD's específicos.
@@ -116,4 +119,17 @@ const instrText = `- Siga as instruções abaixo para saber com exatidão o que 
 
  }
 
-export { faqText, instrText, paymentText };
+ const serviceText = (service, user) => {
+   return `
+🇧🇷 | <b>Operadora Selecionada:</b> ${subWord(user.operator)}
+📲 | <b>Serviços Selecionado:</b> ${service.service_name}
+🛒 | <b>Valor do SMS:</b> R$ ${formataNumero(service.service_price)}
+
+(🔥) <b>Números Disponíveis:</b> 1111
+(💰) <b>Seu Saldo:</b> R$ ${formataNumero(user.balance)}
+   
+<b>Nota:</b> Aproveite, o reenvio de sms no mesmo número é grátis.
+   `;
+ }
+//${getQuantityNumbers(`${service.code}_0`)}
+export { faqText, instrText, paymentText, serviceText };

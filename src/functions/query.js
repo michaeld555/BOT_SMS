@@ -133,6 +133,26 @@ const myTotalBalance = (id) => {
 
 }
 
+const myUserQuery = (id) => {
+
+    const connection = connect();
+    const selectQuery = `SELECT * FROM users WHERE chat_id = ${id} LIMIT 1`;
+
+    return new Promise((resolve, reject) => {
+        connection.query(selectQuery, (error, results) => {
+          if (error) {
+            console.log(error);
+            reject(error);
+          } else {
+            resolve(results[0]);
+          }
+        });
+    
+        connection.end();
+      });
+
+}
+
 const createPayment = (callbackQuery, payment, value) => {
 
     const connection = connect();
@@ -252,4 +272,24 @@ const updateMyOperator = (callbackQuery, data) => {
 
 }
 
-export { startBot, createRecharge, myBalance, rechargeValue, updateRecharge, createPayment, cancelPaymentQuery, searchPaymentQuery, myOperator, updateMyOperator};
+const getAllServices = () => {
+     
+    const connection = connect();
+    const getQuery = `SELECT * FROM services`;
+
+    return new Promise((resolve, reject) => {
+    connection.execute(getQuery, (error, results) => {
+        if (error) {
+        reject(error);
+        } else {
+          console.log(results);
+          resolve(results);
+        }
+    });
+
+    connection.end();
+  });
+
+}
+
+export { startBot, createRecharge, myBalance, rechargeValue, updateRecharge, createPayment, cancelPaymentQuery, searchPaymentQuery, myOperator, updateMyOperator, getAllServices, myUserQuery };
